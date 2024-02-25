@@ -14,35 +14,32 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Mezzio\Template\TemplateRendererInterface;
 
-class DashBoardHandler implements AuthorizedServiceInterface, RequestHandlerInterface
+class DashBoardHandler implements AdminResourceInterface, AuthorizedServiceInterface, RequestHandlerInterface
 {
     use AuthorizedServiceTrait;
-    /**
-     * @var TemplateRendererInterface
-     */
-    private $renderer;
 
-    public function __construct(TemplateRendererInterface $renderer)
-    {
-        $this->renderer = $renderer;
+    private $responseFactory;
+
+    public function __construct(
+        private TemplateRendererInterface $renderer,
+        callable $responseFactory
+    ) {
+        // Ensures type safety of the composed factory
+        $this->responseFactory = static fn(): ResponseInterface => $responseFactory();
     }
 
     public function handle(ServerRequestInterface $request) : ResponseInterface
     {
-        // Do some work...
-        // Render and return a response:
-        return new HtmlResponse($this->renderer->render(
-            'app::dash-board',
-            ['layout' => 'layout::admin'] // parameters to pass to template
-        ));
+        if ($this->isAllowed(request: $request)) {
+            return new HtmlResponse($this->renderer->render(
+                'app::dash-board',
+                ['layout' => 'layout::admin'] // parameters to pass to template
+            ));
+        }
+        return ($this->responseFactory)()->withStatus(403);
     }
 
-    public function getResourceId()
-    {
-        return static::class;
-    }
-
-    public function getPrivilegeId(): string
+    public function getPrivilege(): string
     {
         return 'dashboard';
     }
