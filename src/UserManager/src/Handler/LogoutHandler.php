@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace UserManager\Handler;
 
+use Axleus\Authorization\ResourceInterfaceTrait;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Laminas\Diactoros\Response\RedirectResponse;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use League\Tactician\CommandBus;
 use Mezzio\Session\LazySession;
 use Mezzio\Session\SessionMiddleware;
@@ -15,8 +17,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use UserManager\Auth\LogoutCommand;
 
-class LogoutHandler implements RequestHandlerInterface
+class LogoutHandler implements RequestHandlerInterface, ResourceInterface
 {
+    use ResourceInterfaceTrait;
+
     public function __construct(
         private CommandBus $commandBus,
         private TemplateRendererInterface $renderer

@@ -8,6 +8,8 @@ use Axleus\Authorization\AuthorizedServiceInterface;
 use Axleus\Authorization\AuthorizedServiceTrait;
 use Axleus\Authorization\AdminResourceInterface;
 use Axleus\Authorization\PrivilegeInterface;
+use Axleus\Authorization\PrivilegeInterfaceTrait;
+use Axleus\Authorization\ResourceInterfaceTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -17,6 +19,8 @@ use Mezzio\Template\TemplateRendererInterface;
 class DashBoardHandler implements AdminResourceInterface, AuthorizedServiceInterface, RequestHandlerInterface
 {
     use AuthorizedServiceTrait;
+    use PrivilegeInterfaceTrait;
+    use ResourceInterfaceTrait;
 
     private $responseFactory;
 
@@ -30,7 +34,7 @@ class DashBoardHandler implements AdminResourceInterface, AuthorizedServiceInter
 
     public function handle(ServerRequestInterface $request) : ResponseInterface
     {
-        if ($this->isAllowed(request: $request)) {
+        if ($this->isAllowed(request:$request)) {
             return new HtmlResponse($this->renderer->render(
                 'app::dash-board',
                 ['layout' => 'layout::admin'] // parameters to pass to template

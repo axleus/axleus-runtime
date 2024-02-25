@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
+use App\AdminHandler\DashBoardHandler;
 use UserManager\Auth\CurrentUser;
+use UserManager\Handler\LoginHandler;
 /**
  * @var Laminas\View\Renderer\PhpRenderer $this
  * @var CurrentUser $this->currentUser
@@ -13,7 +15,7 @@ use UserManager\Auth\CurrentUser;
  */
 //$path = $this->url();
 if (isset($this->currentUser) && $this->currentUser instanceof CurrentUser) {
-    $role = $this->currentUser->getRoles()[0];
+    $role = $this->currentUser->getRoles();
 } else {
     $role = 'Guest';
 }
@@ -65,7 +67,19 @@ $this->inlineScript()
                             </a>
                         </li>
                         <?php
-                        if ($role === 'Guest' || $role === 'guest') :
+                        if ($this->isAllowed($role, DashBoardHandler::class, 'dashboard')):
+                        ?>
+                        <li class="nav-item">
+                            <a href="<?=$this->url('admin.dashboard')?>"
+                               class="nav-link<?=$this->url() === $this->url('admin.dashboard') ? ' active' : ''?>">
+                                <i class="fa fa-toolbox"></i> Admin
+                            </a>
+                        </li>
+                        <?php
+                        endif;
+                        ?>
+                        <?php
+                        if ($this->isAllowed($role, LoginHandler::class, 'view')) :
                         ?>
                         <li class="nav-item">
                             <a href="<?=$this->url('user.login')?>"
@@ -92,12 +106,12 @@ $this->inlineScript()
                         endif;
                         ?>
                         <li class="nav-item">
-                            <a href="https://docs.mezzio.dev/mezzio" target="_blank" class="nav-link">
+                            <a href="https://github.com/axleus/axleus/wiki" target="_blank" class="nav-link">
                                 <i class="fa fa-book"></i> Docs
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="https://github.com/webinertia/cms-mezzio" target="_blank" class="nav-link">
+                            <a href="https://github.com/axleus" target="_blank" class="nav-link">
                                 <i class="fa fa-wrench"></i> Contribute
                             </a>
                         </li>
