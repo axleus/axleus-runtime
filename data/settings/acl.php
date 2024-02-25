@@ -54,8 +54,7 @@ return [
             'Guest'  => [
                 \UserManager\Handler\LoginHandler::class => [
                     'privileges' => [
-                        'page',
-                        'home',
+                        'view'
                     ],
                 ],
             ],
@@ -63,12 +62,16 @@ return [
         'deny'      => [
             'Member' => [
                 \UserManager\Handler\LoginHandler::class => [
-                    'privileges' => [],
+                    'privileges' => [
+                        'view',
+                    ],
                 ],
             ],
             'Guest'  => [
                 \UserManager\Handler\LogoutHandler::class => [
-                    'privileges' => [],
+                    'privileges' => [
+                        'view'
+                    ],
                 ],
             ],
         ],

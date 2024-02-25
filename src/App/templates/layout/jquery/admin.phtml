@@ -21,13 +21,16 @@ if (isset($this->currentUser) && $this->currentUser instanceof CurrentUser) {
 }
 $this->headLink()
     ->appendStylesheet('/themes/default/assets/css/bootstrap.min.css')
-    ->appendStylesheet('https://use.fontawesome.com/releases/v5.13.0/css/all.css')
+    ->appendStylesheet('https://use.fontawesome.com/releases/v5.15.4/css/all.css')
     ->appendStylesheet('/themes/default/assets/css/style.css');
 
 $this->inlineScript()
-    ->appendFile('https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.js')
-    ->appendFile('/themes/default/assets/js/bootstrap.min.js')
-    ->appendFile('/themes/jquery/assets/js/app.js');
+    //->appendFile('https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.js')
+    //->appendFile('/themes/default/assets/js/jquery.min.js')
+    ->appendFile('/themes/default/assets/js/bootstrap.js')
+    //->appendFile('/themes/jquery/assets/js/app.js')
+    ;
+
 ?>
 <!DOCTYPE html>
 <html lang="en" class="h-100" data-bs-theme="dark">
@@ -124,7 +127,7 @@ $this->inlineScript()
     </header>
     <main class="flex-shrink-0 app-content">
         <section id="app-work-space" class="container p-5">
-            Layout, default theme
+            Admin Jquery theme
             <?=$this->content?>
         </section>
     </main>
