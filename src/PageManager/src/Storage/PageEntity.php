@@ -13,7 +13,6 @@ class PageEntity implements Db\EntityInterface, ContentInterface
 {
     use Db\EntityTrait;
     use ProprietaryInterfaceTrait;
-    use ResourceInterfaceTrait;
 
     public function __construct(
         protected array|int|string|null $id = null,

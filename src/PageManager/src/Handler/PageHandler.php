@@ -28,11 +28,11 @@ class PageHandler implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
 
-        $page = new PageEntity(null, 'Test Page', 'This is testing the query profiler');
-        $this->commandBus->handle(new Storage\SavePageCommand($page));
+        //$page = new PageEntity(null, 'Test Page', 'This is testing the query profiler');
+        //$this->commandBus->handle(new Storage\SavePageCommand($page));
 
-        $page2 = new PageEntity(null, 'Secondary Page', 'Just adding another query to test the panel');
-        $this->commandBus->handle(new Storage\SavePageCommand($page2));
+        //$page2 = new PageEntity(null, 'Secondary Page', 'Just adding another query to test the panel');
+        //$this->commandBus->handle(new Storage\SavePageCommand($page2));
 
         $entities = ($this->repo?->findAllByTitle('Test Page'));
 

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace UserManager\Auth;
 
-use Laminas\Permissions\Acl\ProprietaryInterface;
+use Axleus\Authorization\AuthorizedServiceInterface;
+use Axleus\Authorization\AuthorizedServiceTrait;
 use Mezzio\Authentication\UserInterface;
 
 /**
@@ -15,8 +16,10 @@ use Mezzio\Authentication\UserInterface;
  *
  * We recommend that any details injected are serializable.
  */
-final class CurrentUser implements UserInterface, ProprietaryInterface
+final class CurrentUser implements AuthorizedServiceInterface, UserInterface
 {
+    use AuthorizedServiceTrait;
+
     private string $identity;
 
     /** @psalm-var array<int|string, string> */
@@ -36,6 +39,10 @@ final class CurrentUser implements UserInterface, ProprietaryInterface
         $this->details  = $details;
     }
 
+    /**
+     * @see AuthorizedServiceInterface
+     * @return mixed
+     */
     public function getOwnerId()
     {
         return $this->getDetail('id', null);
@@ -52,6 +59,18 @@ final class CurrentUser implements UserInterface, ProprietaryInterface
     public function getRoles(): array
     {
         return $this->roles;
+    }
+
+    /**
+     * @see AuthorizedServiceInterface
+     * @return array|string|null
+     */
+    public function getRoleId(): array|string|null
+    {
+        if (isset($this->roleId) && in_array($this->roleId, $this->roles)) {
+            return $this->roleId;
+        }
+        return $this->getRoles();
     }
 
     /**

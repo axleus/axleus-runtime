@@ -67,7 +67,7 @@ $this->inlineScript()
                             </a>
                         </li>
                         <?php
-                        if ($this->isAllowed($role, DashBoardHandler::class, 'dashboard')):
+                        if ($this->isAllowed($this->currentUser, DashBoardHandler::class, 'dashboard')):
                         ?>
                         <li class="nav-item">
                             <a href="<?=$this->url('admin.dashboard')?>"
@@ -79,7 +79,7 @@ $this->inlineScript()
                         endif;
                         ?>
                         <?php
-                        if ($this->isAllowed($role, LoginHandler::class, 'view')) :
+                        if ($this->isAllowed($this->currentUser, LoginHandler::class, 'view')) :
                         ?>
                         <li class="nav-item">
                             <a href="<?=$this->url('user.login')?>"

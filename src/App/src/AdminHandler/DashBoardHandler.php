@@ -7,22 +7,20 @@ namespace App\AdminHandler;
 use Axleus\Authorization\AuthorizedServiceInterface;
 use Axleus\Authorization\AuthorizedServiceTrait;
 use Axleus\Authorization\AdminResourceInterface;
-use Axleus\Authorization\PrivilegeInterface;
-use Axleus\Authorization\PrivilegeInterfaceTrait;
-use Axleus\Authorization\ResourceInterfaceTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Laminas\Diactoros\Response\HtmlResponse;
+use Mezzio\Authentication\UserInterface;
 use Mezzio\Template\TemplateRendererInterface;
 
 class DashBoardHandler implements AdminResourceInterface, AuthorizedServiceInterface, RequestHandlerInterface
 {
     use AuthorizedServiceTrait;
-    use PrivilegeInterfaceTrait;
-    use ResourceInterfaceTrait;
 
+    public const PRIVILEGE_ID = 'dashboard';
     private $responseFactory;
+    private $privilegeId = 'dashboard';
 
     public function __construct(
         private TemplateRendererInterface $renderer,
@@ -34,17 +32,13 @@ class DashBoardHandler implements AdminResourceInterface, AuthorizedServiceInter
 
     public function handle(ServerRequestInterface $request) : ResponseInterface
     {
-        if ($this->isAllowed(request:$request)) {
+        if (
+            $this->isAllowed($request->getAttribute(UserInterface::class))) {
             return new HtmlResponse($this->renderer->render(
                 'app::dash-board',
                 ['layout' => 'layout::admin'] // parameters to pass to template
             ));
         }
         return ($this->responseFactory)()->withStatus(403);
-    }
-
-    public function getPrivilege(): string
-    {
-        return 'dashboard';
     }
 }
